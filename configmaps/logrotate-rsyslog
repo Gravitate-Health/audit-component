@@ -1,0 +1,25 @@
+# MOUNTED
+# IMPORTANT:
+#   There must not be a space between file pattern and {, as this is not removed
+#   from the end of the string.
+
+/var/log-ksi/srv-*.log{
+    # IMPORTANT:
+    #   Note that this include is mandatory as it carries logrotate parameters
+    #   to automatically generated temporary logrotate conf file that is used to
+    #   rotate logsignature files. NONE of the parameters described here will
+    #   be available in automatically generated script. 
+    include /etc/logrotate-rsyslog-ksi-common.conf
+
+    # This include defines two scripts and generates temporary logrotate conf
+    # for integrated log signatures. Actual rotation of log signature files is
+    # done here.
+    #   o postrotate - renames log signature parts file directory that matches
+    #                  the pattern (e.g /var/log/network-1.log.logsig.parts).
+    #   o lastaction - After all log files and log signature parts files are
+    #                  renamed -HUP is sent to rsyslog to close the files.
+    #                  At next logksi integrate is called to get final log
+    #                  signatures. After integration another call to logrotate
+    #                  is called to rotate generated logsignature files.
+    include /etc/logrotate-rsyslog-ksi-integrate.conf
+}

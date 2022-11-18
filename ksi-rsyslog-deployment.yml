@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ksi-rsyslog-deployment
+  labels:
+    app: ksi-rsyslog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ksi-rsyslog
+  template:
+    metadata:
+      labels:
+        app: ksi-rsyslog
+    spec:
+       containers:
+       - name: ksi-rsyslog-container01
+         image: gt/ksi-rsyslog-base:latest
+         imagePullPolicy: Never
+         volumeMounts:
+         - name: rsyslog-conf-volume
+           mountPath: "/etc/rsyslog.conf"
+           subPath: "rsyslog.conf"
+         - name: rsyslog-conf-volume
+           mountPath: "/etc/logrotate-rsyslog-ksi-common.conf"
+           subPath: "logrotate-rsyslog-ksi-common.conf"
+         - name: rsyslog-conf-volume
+           mountPath: "/etc/logrotate.d/logrotate-rsyslog"
+           subPath: "logrotate-rsyslog"
+         - name: host-log-volume
+           mountPath: /var/log-ksi
+# NOTE: log rotation with different mount was not working
+# If rotation is performed inside same directory, it worked.
+#         - name: host-log-totate-volume
+#           mountPath: /var/log-ksi-rotation
+         lifecycle:
+           postStart:
+             exec:
+               command:
+                 - "/bin/sh"
+                 - "-c"
+                 - >
+                   echo -S $KSI_AGGR_URL > /etc/ksi.conf
+                   && echo --aggr-user $KSI_AGGR_USER >> /etc/ksi.conf
+                   && echo --aggr-key $KSI_AGGR_KEY >> /etc/ksi.conf
+                   && echo -P http://verify.guardtime.com/ksi-publications.bin >> /etc/ksi.conf
+                   && echo --cnstr 'email=publications@guardtime.com' >> /etc/ksi.conf
+         ports:
+         - containerPort: 10514
+           name: ksi-rsyslog-svc
+         env:
+           - name: KSI_CONF
+             value: "/etc/ksi.conf"
+           - name: KSI_AGGR_URL
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.aggr.url
+                 optional: false
+           - name: KSI_AGGR_USER
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.aggr.user
+                 optional: false
+           - name: KSI_AGGR_KEY
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.aggr.key
+                 optional: false
+       volumes:
+         - name: rsyslog-conf-volume
+           configMap:
+             name: ksi-rsyslog-conf
+         - name: host-log-volume
+           hostPath:
+             path: /var/log-ksi/
+# NOTE: log rotation with different mount was not working
+# If rotation is performed inside same directory, it worked.
+#         - name: host-log-totate-volume
+#           hostPath:
+#             path: /tmp/log-rotate/
