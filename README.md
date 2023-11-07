@@ -41,7 +41,7 @@ Move to root folder of the project.
 # Note:
 # Note:
 # Note:
-# Note that ksi+http is mandatory URI scheme!
+# Note that ksi+http is mandatory URI scheme! ksi+https and ksi+tcp are the only alternatives.
 
 kubectl create secret generic ksi-user-info-secret \
         --from-literal=ksi.aggr.url=ksi+http://test/gt-signingservice \
