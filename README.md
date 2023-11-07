@@ -93,7 +93,6 @@ ls /var/log-ksi
 # srv-own-log.log.logsig.parts
 
 # Force rsyslog to close and sign log block:
-# See if and what is in log files:
 pkill -1 rsyslogd
 gttlvdump -pP /var/log-ksi/srv-own-log.log.logsig.parts/blocks.dat | less
 gttlvdump -pP /var/log-ksi/srv-own-log.log.logsig.parts/block-signatures.dat | less
@@ -106,11 +105,10 @@ ls /var/log-ksi
 # srv-own-log.log.1.logsig
 
 # Verify log signature
+logksi verify -d -- /var/log-ksi/srv-own-log.log.1
+
+# When repeating the process and rotating once more verification should be done as follows:
 logksi verify -d -- /var/log-ksi/srv-own-log.log.2 /var/log-ksi/srv-own-log.log.1
-
-# When repeating the process and rotating once more verification should be done
-# as follows:
-
 ```
 
 Accessing logging service from the cluster:
