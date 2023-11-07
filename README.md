@@ -106,7 +106,7 @@ ls /var/log-ksi
 # srv-own-log.log.1.logsig
 
 # Verify log signature
-logksi verify --ver-key -d -- /var/log-ksi/srv-own-log.log.2 /var/log-ksi/srv-own-log.log.1
+logksi verify -d -- /var/log-ksi/srv-own-log.log.2 /var/log-ksi/srv-own-log.log.1
 
 # When repeating the process and rotating once more verification should be done
 # as follows:
