@@ -109,6 +109,9 @@ logksi verify -d -- /var/log-ksi/srv-own-log.log.1
 
 # When repeating the process and rotating once more verification should be done as follows:
 logksi verify -d -- /var/log-ksi/srv-own-log.log.2 /var/log-ksi/srv-own-log.log.1
+
+# In these there is a logfile that has unsigned signature, you can sign it like this:
+logksi sign /var/log-ksi/srv-own-log.log.1
 ```
 
 Accessing logging service from the cluster:
