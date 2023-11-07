@@ -41,12 +41,17 @@ Move to root folder of the project.
 # Note:
 # Note:
 # Note:
-# Note that ksi+http is mandatory URI scheme! ksi+https and ksi+tcp are the only alternatives.
+# Note that ksi+http is mandatory URI scheme! ksi+https and ksi+tcp are the only alternatives!
 
 kubectl create secret generic ksi-user-info-secret \
         --from-literal=ksi.aggr.url=ksi+http://test/gt-signingservice \
         --from-literal=ksi.aggr.user=my_user \
-        --from-literal=ksi.aggr.key=my_key
+        --from-literal=ksi.aggr.key=my_key \
+        --from-literal=ksi.ext.url=ksi+http://test/gt-extending \
+        --from-literal=ksi.ext.user=my_user \
+        --from-literal=ksi.ext.key=my_key \
+        --from-literal=ksi.pub.url=http://verify.guardtime.com/ksi-publications.bin \
+        --from-literal=ksi.ext.key='E=publications@guardtime.com'
 
 kubectl create configmap ksi-rsyslog-conf \
         --from-file=configmaps/rsyslog.conf \
