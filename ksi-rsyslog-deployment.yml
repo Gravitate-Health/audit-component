@@ -44,8 +44,11 @@ spec:
                    echo -S $KSI_AGGR_URL > /etc/ksi.conf
                    && echo --aggr-user $KSI_AGGR_USER >> /etc/ksi.conf
                    && echo --aggr-key $KSI_AGGR_KEY >> /etc/ksi.conf
-                   && echo -P http://verify.guardtime.com/ksi-publications.bin >> /etc/ksi.conf
-                   && echo --cnstr 'email=publications@guardtime.com' >> /etc/ksi.conf
+                   && echo -X $KSI_EXT_URL >> /etc/ksi.conf
+                   && echo --ext-user $KSI_EXT_USER >> /etc/ksi.conf
+                   && echo --ext-key $KSI_EXT_KEY >> /etc/ksi.conf
+                   && echo -P $KSI_PUB_URL >> /etc/ksi.conf
+                   && echo --cnstr '$KSI_PUB_CNSTR' >> /etc/ksi.conf
          ports:
          - containerPort: 10514
            name: ksi-rsyslog-svc
@@ -69,6 +72,36 @@ spec:
                secretKeyRef:
                  name: ksi-user-info-secret
                  key: ksi.aggr.key
+                 optional: false
+           - name: KSI_EXT_URL
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.ext.url
+                 optional: false
+           - name: KSI_EXT_USER
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.ext.user
+                 optional: false
+           - name: KSI_EXT_KEY
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.ext.key
+                 optional: false
+           - name: KSI_PUB_URL
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.pub.url
+                 optional: false
+           - name: KSI_PUB_CNSTR
+             valueFrom:
+               secretKeyRef:
+                 name: ksi-user-info-secret
+                 key: ksi.pub.cnstr
                  optional: false
        volumes:
          - name: rsyslog-conf-volume
