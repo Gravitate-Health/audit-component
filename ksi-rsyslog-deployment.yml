@@ -48,7 +48,7 @@ spec:
                    && echo --ext-user $KSI_EXT_USER >> /etc/ksi.conf
                    && echo --ext-key $KSI_EXT_KEY >> /etc/ksi.conf
                    && echo -P $KSI_PUB_URL >> /etc/ksi.conf
-                   && echo --cnstr '$KSI_PUB_CNSTR' >> /etc/ksi.conf
+                   && echo --cnstr E=publications@guardtime.com >> /etc/ksi.conf
          ports:
          - containerPort: 10514
            name: ksi-rsyslog-svc
@@ -96,12 +96,6 @@ spec:
                secretKeyRef:
                  name: ksi-user-info-secret
                  key: ksi.pub.url
-                 optional: false
-           - name: KSI_PUB_CNSTR
-             valueFrom:
-               secretKeyRef:
-                 name: ksi-user-info-secret
-                 key: ksi.pub.cnstr
                  optional: false
        volumes:
          - name: rsyslog-conf-volume
