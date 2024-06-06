@@ -50,8 +50,7 @@ kubectl create secret generic ksi-user-info-secret \
         --from-literal=ksi.ext.url=ksi+http://test/gt-extending \
         --from-literal=ksi.ext.user=my_user \
         --from-literal=ksi.ext.key=my_key \
-        --from-literal=ksi.pub.url=http://verify.guardtime.com/ksi-publications.bin \
-        --from-literal=ksi.pub.cnstr='E=publications@guardtime.com'
+        --from-literal=ksi.pub.url=http://verify.guardtime.com/ksi-publications.bin
 
 kubectl create configmap ksi-rsyslog-conf \
         --from-file=configmaps/rsyslog.conf \
