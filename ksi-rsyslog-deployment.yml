@@ -102,8 +102,8 @@ spec:
            configMap:
              name: ksi-rsyslog-conf
          - name: host-log-volume
-           hostPath:
-             path: /var/log-ksi/
+           persistentVolumeClaim:
+             claimName: ksi-log-pv-claim
 # NOTE: log rotation with different mount was not working
 # If rotation is performed inside same directory, it worked.
 #         - name: host-log-totate-volume

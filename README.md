@@ -58,6 +58,33 @@ kubectl create configmap ksi-rsyslog-conf \
         --from-file=configmaps/logrotate-rsyslog-ksi-common.conf
 ```
 
+### Make persistent volume
+
+At first a volume must be allocated (see `pv-volume.yaml`) with enough space (default is 256MiB) that can satisfy persistent volume claim (default request is for 256Mib) of given size (see `pv-claim.yaml`). The name of the claim is important as it connects the volume with the service. By default the volume is hosted on kubernetes cluster (`hostPath`) that basically connects host path to the pod. It is suitable for testing but for more serious work another solution is recommended.
+
+To create a volume and claim move to root folder of the project and run.
+```sh
+kubectl apply -f pv-volume.yaml
+kubectl apply -f pv-claim.yaml
+```
+
+To delete the volume stop the pods that are using it and run:
+```sh
+ kubectl get pvc ksi-log-pv-claim
+ kubectl delete pv ksi-log-pv-volume
+```
+
+Note: Deleting the persistent volume will not always cause the data to be deleted but only the reference to the data. In example case `hostPath` refers to the path inside the cluset. To clean it up one has to enter the cluster virtual machine or enter the running pod and delete the files manually.
+
+```sh
+kubectl get pods
+# Copy pod full name and replace it in the command:
+# kubectl exec --stdin --tty ksi-rsyslog-deployment-546985b494-h4h9r -- /bin/bash
+cd /var/log-ksi
+rm -rf *.log*
+```
+
+
 ## Deployment.
 
 To deploy the service see `ksi-rsyslog-deployment.yml` and `ksi-rsyslog-service.yml`
