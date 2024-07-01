@@ -74,7 +74,7 @@ To delete the volume stop the pods that are using it and run:
  kubectl delete pv ksi-log-pv-volume
 ```
 
-Note: Deleting the persistent volume will not always cause the data to be deleted but only the reference to the data. In example case `hostPath` refers to the path inside the cluset. To clean it up one has to enter the cluster virtual machine or enter the running pod and delete the files manually.
+Note: Deleting the persistent volume will not always cause the data to be deleted but only the reference to the data. In example case `hostPath` refers to the path inside the cluster. To clean it up one has to enter the cluster virtual machine or enter the running pod and delete the files manually.
 
 ```sh
 kubectl get pods
